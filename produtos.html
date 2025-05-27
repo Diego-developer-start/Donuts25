@@ -91,127 +91,8 @@
 
     <div class="container mt-5">
       <h1 class="text-center mb-4">Nossos Donuts</h1>
-      <div class="row">
-        <!-- Donut Chocolate -->
-        <div class="col-md-4 mb-4">
-          <div class="card" data-product-id="donut-chocolate">
-            <img
-              src="./imagens/donut-chocolate.jpg"
-              class="card-img-top"
-              alt="Donut de Chocolate"
-            />
-            <div class="card-body">
-              <h5 class="card-title">Donut de Chocolate</h5>
-              <p class="card-text">
-                Delicioso donut coberto com chocolate e granulado crocante.
-              </p>
-              <p class="price" data-price="6.00">R$ 6,00</p>
-              <div class="quantity-controls">
-                <button class="btn btn-sm btn-danger" onclick="decrementQuantity('donut-chocolate')">-</button>
-                <input type="number" id="quantity-donut-chocolate" value="1" min="1" class="form-control text-center" style="width: 60px; display: inline-block;">
-                <button class="btn btn-sm btn-primary" onclick="incrementQuantity('donut-chocolate')">+</button>
-              </div>
-              <button class="btn btn-primary add-to-cart mt-2" onclick="addToCart('donut-chocolate')">
-                <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
-              </button>
-            </div>
-          </div>
-        </div>
-        <!-- Donut Morango -->
-        <div class="col-md-4 mb-4">
-          <div class="card" data-product-id="donut-morango">
-            <img src="./imagens/donut-morango.jpg" class="card-img-top" alt="Donut de Morango" />
-            <div class="card-body">
-              <h5 class="card-title">Donut de Morango</h5>
-              <p class="card-text">Donut com cobertura de morango e confeitos coloridos.</p>
-              <p class="price" data-price="7.00">R$ 7,00</p>
-              <div class="quantity-controls">
-                <button class="btn btn-sm btn-danger" onclick="decrementQuantity('donut-morango')">-</button>
-                <input type="number" id="quantity-donut-morango" value="1" min="1" class="form-control text-center" style="width: 60px; display: inline-block;">
-                <button class="btn btn-sm btn-primary" onclick="incrementQuantity('donut-morango')">+</button>
-              </div>
-              <button class="btn btn-primary add-to-cart mt-2" onclick="addToCart('donut-morango')">
-                <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
-              </button>
-            </div>
-          </div>
-        </div>
-        <!-- Donut Glaceado -->
-        <div class="col-md-4 mb-4">
-          <div class="card" data-product-id="donut-glaceado">
-            <img src="./imagens/donut-glaceado.jpg" class="card-img-top" alt="Donut Glaceado" />
-            <div class="card-body">
-              <h5 class="card-title">Donut Glaceado</h5>
-              <p class="card-text">Um donut clássico glaceado e polvilhado com açúcar.</p>
-              <p class="price" data-price="5.50">R$ 5,50</p>
-              <div class="quantity-controls">
-                <button class="btn btn-sm btn-danger" onclick="decrementQuantity('donut-glaceado')">-</button>
-                <input type="number" id="quantity-donut-glaceado" value="1" min="1" class="form-control text-center" style="width: 60px; display: inline-block;">
-                <button class="btn btn-sm btn-primary" onclick="incrementQuantity('donut-glaceado')">+</button>
-              </div>
-              <button class="btn btn-primary add-to-cart mt-2" onclick="addToCart('donut-glaceado')">
-                <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
-              </button>
-            </div>
-          </div>
-        </div>
-        <!-- Donut Caramelo -->
-        <div class="col-md-4 mb-4">
-          <div class="card" data-product-id="donut-caramelo">
-            <img src="./imagens/caramelo.jpg" class="card-img-top" alt="Donut de Caramelo" />
-            <div class="card-body">
-              <h5 class="card-title">Donut de Caramelo</h5>
-              <p class="card-text">Donut com cobertura de caramelo e uma pitada de sal.</p>
-              <p class="price" data-price="6.50">R$ 6,50</p>
-              <div class="quantity-controls">
-                <button class="btn btn-sm btn-danger" onclick="decrementQuantity('donut-caramelo')">-</button>
-                <input type="number" id="quantity-donut-caramelo" value="1" min="1" class="form-control text-center" style="width: 60px; display: inline-block;">
-                <button class="btn btn-sm btn-primary" onclick="incrementQuantity('donut-caramelo')">+</button>
-              </div>
-              <button class="btn btn-primary add-to-cart mt-2" onclick="addToCart('donut-caramelo')">
-                <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
-              </button>
-            </div>
-          </div>
-        </div>
-        <!-- Donut Nutella -->
-        <div class="col-md-4 mb-4">
-          <div class="card" data-product-id="donut-nutella">
-            <img src="./imagens/nutella.jpg" class="card-img-top" alt="Donut de Nutella" />
-            <div class="card-body">
-              <h5 class="card-title">Donut de Nutella</h5>
-              <p class="card-text">Donut recheado com Nutella e coberto com avelãs.</p>
-              <p class="price" data-price="8.00">R$ 8,00</p>
-              <div class="quantity-controls">
-                <button class="btn btn-sm btn-danger" onclick="decrementQuantity('donut-nutella')">-</button>
-                <input type="number" id="quantity-donut-nutella" value="1" min="1" class="form-control text-center" style="width: 60px; display: inline-block;">
-                <button class="btn btn-sm btn-primary" onclick="incrementQuantity('donut-nutella')">+</button>
-              </div>
-              <button class="btn btn-primary add-to-cart mt-2" onclick="addToCart('donut-nutella')">
-                <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
-              </button>
-            </div>
-          </div>
-        </div>
-        <!-- Donut Baunilha -->
-        <div class="col-md-4 mb-4">
-          <div class="card" data-product-id="donut-baunilha">
-            <img src="./imagens/donut-baunilha.jpg" class="card-img-top" alt="Donut de Baunilha" />
-            <div class="card-body">
-              <h5 class="card-title">Donut de Baunilha</h5>
-              <p class="card-text">Donut macio com cobertura de baunilha e confeitos.</p>
-              <p class="price" data-price="6.50">R$ 6,50</p>
-              <div class="quantity-controls">
-                <button class="btn btn-sm btn-danger" onclick="decrementQuantity('donut-baunilha')">-</button>
-                <input type="number" id="quantity-donut-baunilha" value="1" min="1" class="form-control text-center" style="width: 60px; display: inline-block;">
-                <button class="btn btn-sm btn-primary" onclick="incrementQuantity('donut-baunilha')">+</button>
-              </div>
-              <button class="btn btn-primary add-to-cart mt-2" onclick="addToCart('donut-baunilha')">
-                <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
-              </button>
-            </div>
-          </div>
-        </div>
+      <div class="row" id="products-container">
+        <!-- Os produtos serão carregados dinamicamente aqui -->
       </div>
     </div>
 
@@ -278,95 +159,88 @@
         window.location.href = 'index.html';
       });
 
-      // Função para adicionar ao carrinho
-      function addToCart(productId) {
-        // Pega a quantidade do input
-        const quantityInput = document.getElementById(`quantity-${productId}`);
-        const quantity = parseInt(quantityInput.value);
-        
-        if (isNaN(quantity) || quantity < 1) {
-          alert('Por favor, selecione uma quantidade válida');
-          return;
-        }
-
-        // Encontra o card do produto
-        const productCard = document.querySelector(`[data-product-id="${productId}"]`);
-        if (!productCard) {
-          console.error('Produto não encontrado:', productId);
-          return;
-        }
-
-        // Pega os dados do produto
-        const name = productCard.querySelector('.card-title').textContent;
-        const priceElement = productCard.querySelector('.price');
-        const price = parseFloat(priceElement.getAttribute('data-price'));
-
-        // Adiciona ao carrinho
-        cart.addItem(productId, quantity, name, price);
-        
-        // Resetar quantidade para 1 após adicionar
-        quantityInput.value = '1';
-
-        // Mostra mensagem de sucesso
-        alert('Produto adicionado ao carrinho!');
-      }
-
-      // Função para incrementar quantidade
-      function incrementQuantity(productId) {
-        const quantityInput = document.getElementById(`quantity-${productId}`);
-        const currentQuantity = parseInt(quantityInput.value);
-        quantityInput.value = currentQuantity + 1;
-      }
-
-      // Função para decrementar quantidade
-      function decrementQuantity(productId) {
-        const quantityInput = document.getElementById(`quantity-${productId}`);
-        const currentQuantity = parseInt(quantityInput.value);
-        if (currentQuantity > 1) {
-          quantityInput.value = currentQuantity - 1;
-        }
-      }
-
-      // Função para remover item do carrinho
-      function removeFromCart(productId) {
-        cart.removeItem(productId);
-      }
-
-      // Carregar produtos
+      // Função para carregar os produtos da API
       async function loadProducts() {
         try {
+          console.log('Iniciando carregamento dos produtos...');
           const response = await fetch('http://localhost:3000/api/products');
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
           const products = await response.json();
-
-          const productsContainer = document.getElementById('products-container');
-          productsContainer.innerHTML = products.map(product => `
-            <div class="product-card">
-              <img src="${product.image}" alt="${product.name}" class="product-image">
-              <h3>${product.name}</h3>
-              <p class="price">R$ ${product.price.toFixed(2)}</p>
-              <div class="quantity-controls">
-                <button onclick="decrementQuantity('${product._id}')">-</button>
-                <span id="quantity-${product._id}">1</span>
-                <button onclick="incrementQuantity('${product._id}')">+</button>
+          console.log('Produtos recebidos:', products);
+          
+          const container = document.getElementById('products-container');
+          container.innerHTML = ''; // Limpa o container antes de adicionar os produtos
+          
+          if (!Array.isArray(products) || products.length === 0) {
+            console.error('Nenhum produto recebido ou formato inválido');
+            container.innerHTML = '<div class="col-12 text-center"><p>Nenhum produto disponível no momento.</p></div>';
+            return;
+          }
+          
+          products.forEach(product => {
+            console.log('Processando produto:', product);
+            const productCard = `
+              <div class="col-md-4 mb-4">
+                <div class="card" data-product-id="${product._id}">
+                  <img src="${product.image}" class="card-img-top" alt="${product.name}" style="height: 200px; object-fit: cover;">
+                  <div class="card-body">
+                    <h5 class="card-title">${product.name}</h5>
+                    <p class="card-text">${product.description}</p>
+                    <p class="price" data-price="${product.price}">R$ ${product.price.toFixed(2)}</p>
+                    <div class="quantity-controls">
+                      <button class="btn btn-sm btn-danger" onclick="decrementQuantity('${product._id}')">-</button>
+                      <input type="number" id="quantity-${product._id}" value="1" min="1" class="form-control text-center" style="width: 60px; display: inline-block;">
+                      <button class="btn btn-sm btn-primary" onclick="incrementQuantity('${product._id}')">+</button>
+                    </div>
+                    <button class="btn btn-primary add-to-cart mt-2" onclick="addToCart('${product._id}', '${product.name}', ${product.price})">
+                      <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+                    </button>
+                  </div>
+                </div>
               </div>
-              <button class="add-to-cart" onclick="addToCart('${product._id}')">
-                <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
-              </button>
-            </div>
-          `).join('');
+            `;
+            container.innerHTML += productCard;
+          });
         } catch (error) {
           console.error('Erro ao carregar produtos:', error);
+          const container = document.getElementById('products-container');
+          container.innerHTML = `
+            <div class="col-12 text-center">
+              <p>Erro ao carregar produtos. Por favor, tente novamente mais tarde.</p>
+              <p class="text-muted">Detalhes do erro: ${error.message}</p>
+            </div>
+          `;
         }
       }
 
       // Carregar produtos quando a página carregar
-      document.addEventListener('DOMContentLoaded', loadProducts);
-
-      // Inicialização
       document.addEventListener('DOMContentLoaded', function() {
+        console.log('Página carregada, iniciando carregamento dos produtos...');
+        loadProducts();
         checkAuth();
         updateCartDisplay();
       });
+
+      // Funções de controle de quantidade
+      function incrementQuantity(productId) {
+        const input = document.getElementById(`quantity-${productId}`);
+        input.value = parseInt(input.value) + 1;
+      }
+
+      function decrementQuantity(productId) {
+        const input = document.getElementById(`quantity-${productId}`);
+        if (parseInt(input.value) > 1) {
+          input.value = parseInt(input.value) - 1;
+        }
+      }
+
+      // Função para adicionar ao carrinho
+      function addToCart(productId, name, price) {
+        const quantity = parseInt(document.getElementById(`quantity-${productId}`).value);
+        cart.addItem(productId, quantity, name, price);
+      }
     </script>
   </body>
 </html>

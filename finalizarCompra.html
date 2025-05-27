@@ -325,16 +325,6 @@
           state: document.getElementById('state').value
         };
 
-        // Prepara os dados do pedido
-        const pedido = {
-          products: cartItems.map(item => ({
-            product: item._id || item.id, // Garante que o _id real do MongoDB seja usado
-            quantity: item.quantity
-          })),
-          total: total,
-          address: address
-        };
-
         try {
           // Mostra loading
           const btnFinalizar = document.querySelector('button[type="submit"]');
@@ -355,6 +345,22 @@
           if (!addressResponse.ok) {
             throw new Error('Erro ao salvar endereço');
           }
+          
+          // Obtém o endereço salvo com seu ID
+          const savedAddress = await addressResponse.json();
+          console.log('Endereço salvo:', savedAddress);
+          
+          // Prepara os dados do pedido com o endereço completo
+          const pedido = {
+            products: cartItems.map(item => ({
+              product: item._id || item.id, // Garante que o _id real do MongoDB seja usado
+              quantity: item.quantity
+            })),
+            total: total,
+            address: address // Envia o objeto de endereço completo
+          };
+          
+          console.log('Pedido a ser enviado:', pedido);
 
           // Depois cria o pedido
           const orderResponse = await fetch('http://localhost:3000/api/orders', {

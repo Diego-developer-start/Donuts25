@@ -142,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     state: document.getElementById('state').value,
                     instructions: document.getElementById('instructions').value
                 };
+                console.log('Endereço preenchido:', address);
                 const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
                 if(cartItems.length === 0) {
                     alert('Carrinho está vazio!');
@@ -156,15 +157,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     })),
                     total: total,
                     address: {
-                        rua: address.street,
-                        numero: address.number,
-                        bairro: address.neighborhood,
-                        cidade: address.city,
-                        estado: address.state,
+                        street: address.street,
+                        number: address.number,
+                        neighborhood: address.neighborhood,
+                        city: address.city,
+                        state: address.state,
                         cep: address.cep,
-                        complemento: address.complement
+                        complement: address.complement,
+                        instructions: address.instructions
                     }
                 };
+                console.log('Pedido a ser enviado:', pedido);
                 try {
                     // Salva o endereço
                     await saveDeliveryAddress(address);

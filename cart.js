@@ -85,22 +85,35 @@ document.addEventListener('DOMContentLoaded', function() {
 class Cart {
     constructor() {
         this.items = JSON.parse(localStorage.getItem('cart')) || [];
+        console.log('Carrinho inicializado com itens:', this.items);
         this.updateUI();
     }
 
     // Adicionar item ao carrinho
     addItem(productId, quantity, name, price) {
+        console.log('Tentando adicionar item:', { productId, quantity, name, price });
+        
+        // Garante que o productId seja uma string válida
+        if (!productId || typeof productId !== 'string') {
+            console.error('ID do produto inválido:', productId);
+            return;
+        }
+
         const existingItem = this.items.find(item => item.id === productId);
+        console.log('Item existente:', existingItem);
         
         if (existingItem) {
             existingItem.quantity += quantity;
+            console.log('Quantidade atualizada:', existingItem.quantity);
         } else {
-            this.items.push({
+            const newItem = {
                 id: productId,
                 name: name,
                 price: price,
                 quantity: quantity
-            });
+            };
+            console.log('Novo item adicionado:', newItem);
+            this.items.push(newItem);
         }
         
         this.save();
@@ -109,13 +122,22 @@ class Cart {
 
     // Remover item do carrinho
     removeItem(productId) {
+        console.log('Tentando remover item:', productId);
+        
+        if (!productId || typeof productId !== 'string') {
+            console.error('ID do produto inválido:', productId);
+            return;
+        }
+
         this.items = this.items.filter(item => item.id !== productId);
+        console.log('Itens após remoção:', this.items);
         this.save();
         this.updateUI();
     }
 
     // Limpar carrinho
     clear() {
+        console.log('Limpando carrinho');
         this.items = [];
         this.save();
         this.updateUI();
@@ -123,16 +145,20 @@ class Cart {
 
     // Salvar carrinho no localStorage
     save() {
+        console.log('Salvando carrinho:', this.items);
         localStorage.setItem('cart', JSON.stringify(this.items));
     }
 
     // Atualizar interface
     updateUI() {
+        console.log('Atualizando interface do carrinho');
+        
         // Atualizar contador do carrinho
         const cartCount = document.getElementById('cart-count');
         if (cartCount) {
             const totalItems = this.items.reduce((sum, item) => sum + item.quantity, 0);
             cartCount.textContent = totalItems;
+            console.log('Total de itens atualizado:', totalItems);
         }
 
         // Atualizar lista de itens
@@ -150,6 +176,7 @@ class Cart {
                     </button>
                 </div>
             `).join('');
+            console.log('Lista de itens atualizada');
         }
 
         // Atualizar total
@@ -157,6 +184,7 @@ class Cart {
         if (cartTotal) {
             const total = this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             cartTotal.textContent = `R$ ${total.toFixed(2)}`;
+            console.log('Total atualizado:', total);
         }
     }
 }

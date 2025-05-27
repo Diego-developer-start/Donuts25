@@ -8,6 +8,38 @@ require('dotenv').config();
 
 const app = express();
 
+// Importar rota do chatbot
+const chatRouter = require('./routes/chat');
+
+// Conexão com MongoDB
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/donut-shop', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => {
+    console.log('✅ Conectado ao MongoDB com sucesso!');
+    console.log('📦 Database:', mongoose.connection.db.databaseName);
+    console.log('🔌 Host:', mongoose.connection.host);
+    console.log('🔑 Porta:', mongoose.connection.port);
+})
+.catch(err => {
+    console.error('❌ Erro na conexão com MongoDB:', err);
+    process.exit(1);
+});
+
+// Adicionar eventos de conexão
+mongoose.connection.on('connected', () => {
+    console.log('🟢 MongoDB conectado');
+});
+
+mongoose.connection.on('error', (err) => {
+    console.error('🔴 Erro na conexão MongoDB:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+    console.log('🟡 MongoDB desconectado');
+});
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -168,9 +200,12 @@ app.get('/api/user', authMiddleware, async (req, res) => {
 // Rotas de Produtos
 app.get('/api/products', async (req, res) => {
     try {
+        console.log('Buscando produtos...');
         const products = await Product.find();
+        console.log('Produtos encontrados:', products.length);
         res.json(products);
     } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
         res.status(500).json({ message: 'Erro ao buscar produtos', error: error.message });
     }
 });
@@ -178,16 +213,12 @@ app.get('/api/products', async (req, res) => {
 // Rotas de Pedidos
 app.post('/api/orders', authMiddleware, async (req, res) => {
     try {
-        console.log('Recebendo requisição de pedido:', {
-            userId: req.user._id,
-            body: req.body
-        });
-
+        console.log('📦 Recebendo novo pedido...');
         const { products, total } = req.body;
         
         // Validação dos dados
         if (!products || !Array.isArray(products) || products.length === 0) {
-            console.error('Lista de produtos inválida:', products);
+            console.error('❌ Lista de produtos inválida:', products);
             return res.status(400).json({ 
                 message: 'Lista de produtos inválida',
                 received: products 
@@ -195,7 +226,7 @@ app.post('/api/orders', authMiddleware, async (req, res) => {
         }
 
         if (!total || isNaN(total) || total <= 0) {
-            console.error('Total inválido:', total);
+            console.error('❌ Total inválido:', total);
             return res.status(400).json({ 
                 message: 'Total inválido',
                 received: total 
@@ -205,7 +236,7 @@ app.post('/api/orders', authMiddleware, async (req, res) => {
         // Verificar se todos os produtos existem e validar quantidades
         for (const item of products) {
             if (!item.product || !item.quantity) {
-                console.error('Item de produto inválido:', item);
+                console.error('❌ Item de produto inválido:', item);
                 return res.status(400).json({ 
                     message: 'Item de produto inválido',
                     received: item 
@@ -213,7 +244,7 @@ app.post('/api/orders', authMiddleware, async (req, res) => {
             }
 
             if (item.quantity < 1) {
-                console.error('Quantidade inválida:', item.quantity);
+                console.error('❌ Quantidade inválida:', item.quantity);
                 return res.status(400).json({ 
                     message: 'Quantidade deve ser maior que zero',
                     received: item.quantity 
@@ -222,7 +253,7 @@ app.post('/api/orders', authMiddleware, async (req, res) => {
 
             const product = await Product.findById(item.product);
             if (!product) {
-                console.error('Produto não encontrado:', item.product);
+                console.error('❌ Produto não encontrado:', item.product);
                 return res.status(400).json({ 
                     message: `Produto não encontrado: ${item.product}`,
                     productId: item.product 
@@ -230,55 +261,69 @@ app.post('/api/orders', authMiddleware, async (req, res) => {
             }
         }
 
-        console.log('Criando pedido com os dados:', {
-            user: req.user._id,
-            products,
-            total
-        });
+        console.log('✅ Dados do pedido validados com sucesso');
 
         const order = new Order({
             user: req.user._id,
             products,
             total,
+            address: req.body.address, // Adiciona o endereço ao pedido
             status: 'pendente'
         });
-
-        console.log('Pedido criado (antes de salvar):', order);
-
-        // Validar o pedido antes de salvar
-        const validationError = order.validateSync();
-        if (validationError) {
-            console.error('Erro de validação do pedido:', validationError);
-            return res.status(400).json({
-                message: 'Erro de validação do pedido',
-                errors: Object.keys(validationError.errors).map(key => ({
-                    field: key,
-                    message: validationError.errors[key].message
-                }))
-            });
-        }
+        
+        console.log('📦 Criando pedido com endereço:', req.body.address);
 
         await order.save();
-        
-        console.log('Pedido salvo com sucesso, buscando detalhes...');
+        console.log('✅ Pedido salvo no banco de dados');
 
-        // Retornar o pedido com os detalhes dos produtos
+        // Buscar o pedido com dados populados
         const populatedOrder = await Order.findById(order._id)
-            .populate('products.product')
-            .populate('user', 'name email');
+            .populate('user', 'name email')
+            .populate('products.product', 'name price');
 
-        console.log('Pedido populado:', populatedOrder);
+        // Exibir informações detalhadas do pedido
+        console.log('\n📦 Pedido Criado com Sucesso!');
+        console.log('👤 Cliente:', populatedOrder.user.name, `<${populatedOrder.user.email}>`);
 
-        res.status(201).json(populatedOrder);
+        if (populatedOrder.address) {
+            console.log('\n📍 Endereço de Entrega:');
+            console.log(`  Rua: ${populatedOrder.address.street}, Nº: ${populatedOrder.address.number}`);
+            console.log(`  Bairro: ${populatedOrder.address.neighborhood}`);
+            console.log(`  Cidade: ${populatedOrder.address.city} - ${populatedOrder.address.state}`);
+            console.log(`  CEP: ${populatedOrder.address.cep}`);
+            if (populatedOrder.address.complement) {
+                console.log(`  Complemento: ${populatedOrder.address.complement}`);
+            }
+        }
+
+        console.log('\n🛒 Itens do Pedido:');
+        populatedOrder.products.forEach((item, index) => {
+            const nome = item.product?.name || 'Produto desconhecido';
+            const preco = item.product?.price || 0;
+            const subtotal = preco * item.quantity;
+            console.log(`  ${index + 1}. ${nome}`);
+            console.log(`     Quantidade: ${item.quantity}`);
+            console.log(`     Preço unitário: R$ ${preco.toFixed(2)}`);
+            console.log(`     Subtotal: R$ ${subtotal.toFixed(2)}`);
+        });
+
+        console.log('\n💰 Total do Pedido: R$ ' + populatedOrder.total.toFixed(2));
+        console.log('📦 Status: ' + populatedOrder.status);
+        console.log('🕒 Criado em: ' + new Date(populatedOrder.createdAt).toLocaleString());
+        console.log('\n' + '='.repeat(50) + '\n');
+
+        res.status(201).json({
+            message: 'Pedido criado com sucesso',
+            order: populatedOrder
+        });
     } catch (error) {
-        console.error('Erro detalhado ao criar pedido:', {
+        console.error('❌ Erro ao criar pedido:', {
             message: error.message,
             stack: error.stack,
             name: error.name,
-            errors: error.errors // Erros de validação do Mongoose
+            errors: error.errors
         });
         
-        // Tratamento específico para erros de validação do Mongoose
         if (error.name === 'ValidationError') {
             return res.status(400).json({
                 message: 'Erro de validação do pedido',
@@ -424,25 +469,13 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/contact', contactRoutes);
 
+// Usar rota do chatbot
+app.use('/api', chatRouter);
+
 const PORT = process.env.PORT || 3000;
 
-// Conexão com MongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/donut-shop', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 5000,
-    socketTimeoutMS: 45000,
-    family: 4
-})
-.then(() => {
-    console.log('Conectado ao MongoDB');
-    // Iniciar o servidor apenas após conectar ao MongoDB
-    app.listen(PORT, '0.0.0.0', () => {
-        console.log(`Servidor rodando na porta ${PORT}`);
-        console.log(`Acesse: http://localhost:${PORT}`);
-    });
-})
-.catch(err => {
-    console.error('Erro na conexão com MongoDB:', err);
-    process.exit(1);
+// Iniciar o servidor apenas após conectar ao MongoDB
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+    console.log(`Acesse: http://localhost:${PORT}`);
 });

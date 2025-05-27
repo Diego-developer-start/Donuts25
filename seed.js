@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Product = require('./models/Product');
 
 // Conexão com MongoDB
-mongoose.connect('mongodb://localhost:27017/donut-shop', {
+mongoose.connect('mongodb://127.0.0.1:27017/donut-shop', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -13,21 +13,45 @@ mongoose.connect('mongodb://localhost:27017/donut-shop', {
 const produtos = [
     {
         name: "Donut Chocolate",
-        description: "Donut com cobertura de chocolate",
-        price: 5.99,
-        image: "chocolate.jpg"
+        description: "Delicioso donut coberto com chocolate e granulado crocante.",
+        price: 6.00,
+        image: "./imagens/donut-chocolate.jpg",
+        category: "Tradicional"
     },
     {
         name: "Donut Morango",
-        description: "Donut com cobertura de morango",
-        price: 6.99,
-        image: "morango.jpg"
+        description: "Donut com cobertura de morango e confeitos coloridos.",
+        price: 7.00,
+        image: "./imagens/donut-morango.jpg",
+        category: "Frutas"
+    },
+    {
+        name: "Donut Glaceado",
+        description: "Um donut clássico glaceado e polvilhado com açúcar.",
+        price: 5.50,
+        image: "./imagens/donut-glaceado.jpg",
+        category: "Tradicional"
     },
     {
         name: "Donut Caramelo",
-        description: "Donut com cobertura de caramelo",
-        price: 5.99,
-        image: "caramelo.jpg"
+        description: "Donut com cobertura de caramelo e uma pitada de sal.",
+        price: 6.50,
+        image: "./imagens/caramelo.jpg",
+        category: "Especial"
+    },
+    {
+        name: "Donut Nutella",
+        description: "Donut recheado com Nutella e coberto com avelãs.",
+        price: 8.00,
+        image: "./imagens/nutella.jpg",
+        category: "Especial"
+    },
+    {
+        name: "Donut Baunilha",
+        description: "Donut macio com cobertura de baunilha e confeitos.",
+        price: 6.50,
+        image: "./imagens/donut-baunilha.jpg",
+        category: "Tradicional"
     }
 ];
 
