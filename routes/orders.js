@@ -198,4 +198,137 @@ router.get('/my-orders', auth, async (req, res) => {
     }
 });
 
+// Nova rota para exibir pedidos formatados em português com dados legíveis
+router.get('/formatted/:id', async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        
+        // Buscar o pedido com populate para obter dados reais
+        const order = await Order.findById(orderId)
+            .populate('user', 'name email')
+            .populate('products.product', 'name price');
+            
+        if (!order) {
+            return res.status(404).json({ message: 'Pedido não encontrado' });
+        }
+        
+        // Formatar o documento em português com dados legíveis
+        const pedidoFormatado = {
+            "id": order._id,
+            "usuário": order.user?.name || order.nomeUsuario || "Usuário não identificado",
+            "email do usuário": order.user?.email || "Email não disponível",
+            "produtos": order.products.map(item => ({
+                "nome do produto": item.product?.name || "Produto não identificado",
+                "preço unitário": item.product?.price ? `R$ ${item.product.price.toFixed(2)}` : "Preço não disponível",
+                "quantidade": item.quantity,
+                "subtotal": item.product?.price ? `R$ ${(item.product.price * item.quantity).toFixed(2)}` : "Subtotal não disponível"
+            })),
+            "total": `R$ ${order.total.toFixed(2)}`,
+            "resumo do pedido": order.resumoPedido || "Resumo não disponível",
+            "nomes dos produtos": order.nomeProdutos || [],
+            "endereço": {
+                "CEP": order.address?.cep || "Não informado",
+                "rua": order.address?.street || "Não informado",
+                "número": order.address?.number || "Não informado",
+                "complemento": order.address?.complement || "",
+                "bairro": order.address?.neighborhood || "Não informado",
+                "cidade": order.address?.city || "Não informado",
+                "estado": order.address?.state || "Não informado",
+                "instruções de entrega": order.address?.instructions || "Nenhuma instrução especial"
+            },
+            "status do pedido": order.status || "Status não definido",
+            "data de criação": order.createdAt ? new Date(order.createdAt).toLocaleString('pt-BR') : "Data não disponível",
+            "última atualização": order.updatedAt ? new Date(order.updatedAt).toLocaleString('pt-BR') : "Data não disponível"
+        };
+        
+        // Exibir no console do servidor em formato legível
+        console.log('\n' + '='.repeat(60));
+        console.log('📋 PEDIDO FORMATADO EM PORTUGUÊS');
+        console.log('='.repeat(60));
+        console.log('🆔 ID do Pedido:', pedidoFormatado.id);
+        console.log('👤 Usuário:', pedidoFormatado.usuário);
+        console.log('📧 Email:', pedidoFormatado["email do usuário"]);
+        console.log('\n🛒 PRODUTOS:');
+        pedidoFormatado.produtos.forEach((produto, index) => {
+            console.log(`   ${index + 1}. ${produto["nome do produto"]}`);
+            console.log(`      💰 Preço: ${produto["preço unitário"]}`);
+            console.log(`      📦 Quantidade: ${produto.quantidade}`);
+            console.log(`      💵 Subtotal: ${produto.subtotal}`);
+        });
+        console.log('\n💰 Total do Pedido:', pedidoFormatado.total);
+        console.log('📝 Resumo:', pedidoFormatado["resumo do pedido"]);
+        console.log('\n📍 ENDEREÇO DE ENTREGA:');
+        console.log(`   📮 CEP: ${pedidoFormatado.endereço.CEP}`);
+        console.log(`   🏠 Endereço: ${pedidoFormatado.endereço.rua}, ${pedidoFormatado.endereço.número}`);
+        if (pedidoFormatado.endereço.complemento) {
+            console.log(`   🏢 Complemento: ${pedidoFormatado.endereço.complemento}`);
+        }
+        console.log(`   🏘️ Bairro: ${pedidoFormatado.endereço.bairro}`);
+        console.log(`   🏙️ Cidade: ${pedidoFormatado.endereço.cidade} - ${pedidoFormatado.endereço.estado}`);
+        if (pedidoFormatado.endereço["instruções de entrega"] !== "Nenhuma instrução especial") {
+            console.log(`   📋 Instruções: ${pedidoFormatado.endereço["instruções de entrega"]}`);
+        }
+        console.log('\n📊 STATUS E DATAS:');
+        console.log(`   🔄 Status: ${pedidoFormatado["status do pedido"]}`);
+        console.log(`   📅 Criado em: ${pedidoFormatado["data de criação"]}`);
+        console.log(`   🔄 Atualizado em: ${pedidoFormatado["última atualização"]}`);
+        console.log('='.repeat(60) + '\n');
+        
+        // Retornar o documento formatado
+        res.json(pedidoFormatado);
+        
+    } catch (error) {
+        console.error('❌ Erro ao buscar pedido formatado:', error);
+        res.status(500).json({ message: 'Erro ao buscar pedido formatado', error: error.message });
+    }
+});
+
+// Rota para listar todos os pedidos formatados (para administradores)
+router.get('/formatted', async (req, res) => {
+    try {
+        // Buscar todos os pedidos com populate
+        const orders = await Order.find()
+            .populate('user', 'name email')
+            .populate('products.product', 'name price')
+            .sort({ createdAt: -1 });
+            
+        // Formatar todos os pedidos
+        const pedidosFormatados = orders.map(order => ({
+            "id": order._id,
+            "usuário": order.user?.name || order.nomeUsuario || "Usuário não identificado",
+            "email do usuário": order.user?.email || "Email não disponível",
+            "produtos": order.products.map(item => ({
+                "nome do produto": item.product?.name || "Produto não identificado",
+                "preço unitário": item.product?.price ? `R$ ${item.product.price.toFixed(2)}` : "Preço não disponível",
+                "quantidade": item.quantity,
+                "subtotal": item.product?.price ? `R$ ${(item.product.price * item.quantity).toFixed(2)}` : "Subtotal não disponível"
+            })),
+            "total": `R$ ${order.total.toFixed(2)}`,
+            "resumo do pedido": order.resumoPedido || "Resumo não disponível",
+            "endereço": {
+                "CEP": order.address?.cep || "Não informado",
+                "rua": order.address?.street || "Não informado",
+                "número": order.address?.number || "Não informado",
+                "complemento": order.address?.complement || "",
+                "bairro": order.address?.neighborhood || "Não informado",
+                "cidade": order.address?.city || "Não informado",
+                "estado": order.address?.state || "Não informado"
+            },
+            "status do pedido": order.status || "Status não definido",
+            "data de criação": order.createdAt ? new Date(order.createdAt).toLocaleString('pt-BR') : "Data não disponível"
+        }));
+        
+        console.log(`\n📋 Listando ${pedidosFormatados.length} pedidos formatados em português`);
+        
+        res.json({
+            "total de pedidos": pedidosFormatados.length,
+            "pedidos": pedidosFormatados
+        });
+        
+    } catch (error) {
+        console.error('❌ Erro ao listar pedidos formatados:', error);
+        res.status(500).json({ message: 'Erro ao listar pedidos formatados', error: error.message });
+    }
+});
+
 module.exports = router;

@@ -22,7 +22,15 @@ const knowledgeBase = {
     'franquia': 'Sim, temos oportunidades de franquia! Entre em contato para mais informações.',
     'trabalhe': 'Estamos sempre procurando pessoas talentosas! Envie seu currículo pelo site.',
     'sabores': 'Temos mais de 20 sabores diferentes! Chocolate, morango, doce de leite, e muito mais!',
-    'especial': 'Temos donuts especiais para datas comemorativas! Fique de olho em nossas redes sociais.'
+    'especial': 'Temos donuts especiais para datas comemorativas! Fique de olho em nossas redes sociais.',
+    'contato': 'Você pode entrar em contato conosco pelo telefone (11) 99999-9999, WhatsApp (11) 99999-9999, ou email contato@sweetdonut.com.br',
+    'telefone': 'Nosso telefone é (11) 99999-9999. Atendemos de segunda a sábado, das 8h às 20h.',
+    'whatsapp': 'Nosso WhatsApp é (11) 99999-9999. Você pode nos chamar a qualquer hora!',
+    'email': 'Nosso email é contato@sweetdonut.com.br. Respondemos em até 24 horas.',
+    'falar': 'Você pode falar conosco pelo telefone (11) 99999-9999, WhatsApp (11) 99999-9999, ou email contato@sweetdonut.com.br',
+    'ligar': 'Você pode nos ligar no telefone (11) 99999-9999. Atendemos de segunda a sábado, das 8h às 20h.',
+    'chamar': 'Você pode nos chamar no WhatsApp (11) 99999-9999. Estamos sempre disponíveis!',
+    'mandar': 'Você pode mandar um email para contato@sweetdonut.com.br ou uma mensagem no WhatsApp (11) 99999-9999.'
 };
 
 // Função para encontrar a melhor resposta
@@ -83,4 +91,4 @@ router.post('/chat', async (req, res) => {
     }
 });
 
-module.exports = router; 
+module.exports = router;
